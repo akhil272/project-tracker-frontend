@@ -1,5 +1,5 @@
-import { Box, Button, Text, useToast } from "@chakra-ui/react";
-import { createClient } from "@Query/clients";
+import { Box, useToast } from "@chakra-ui/react";
+import TaskCard from "@Components/TaskCard";
 import { fetchTasks, startTask, stopTask } from "@Query/task";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
@@ -11,6 +11,7 @@ interface taskProps {
   endTime: Date;
   totalTime: number;
   comments: string;
+  running: boolean;
   projectsOnProcessProjectId: number;
   projectsOnProcessProcessId: number;
   projectsOnProcess: {
@@ -67,37 +68,25 @@ const Task = () => {
   if (status === "error") {
     return <p>Error...</p>;
   }
-
+  const handleStart = (id: number) => {
+    startTaskMutation.mutate({ id, startTime: new Date() });
+  };
+  const handleEnd = (id: number) => {
+    stopTaskMutation.mutate({ id, endTime: new Date() });
+  };
   return (
     <div>
       {data?.map((task: taskProps) => (
         <Box marginY={4} key={task.id}>
-          <Box>
-            <Text>Task Name</Text>
-            <Text> {task.name}</Text>
-            <Text>{task.projectsOnProcess.project.name}</Text>
-            <Text>{task.projectsOnProcess.project.client.name}</Text>
-            <br />
-
-            <Box marginY={4}>
-              <Text>Total Time</Text>
-              <Text>{task.totalTime}</Text>
-            </Box>
-          </Box>
-          <Button
-            onClick={() => {
-              startTaskMutation.mutate({ id: task.id, startTime: new Date() });
-            }}
-          >
-            Start
-          </Button>
-          <Button
-            onClick={() => {
-              stopTaskMutation.mutate({ id: task.id, endTime: new Date() });
-            }}
-          >
-            End
-          </Button>
+          <TaskCard
+            name={task.name}
+            projectName={task.projectsOnProcess.project.name}
+            clientName={task.projectsOnProcess.project.client.name}
+            totalTime={task.totalTime}
+            handleStart={() => handleStart(task.id)}
+            handleEnd={() => handleEnd(task.id)}
+            running={task.running}
+          />
         </Box>
       ))}
     </div>
