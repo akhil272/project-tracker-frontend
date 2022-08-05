@@ -40,7 +40,7 @@ const CreateClientModal = ({ isOpen, onOpen, onClose }: any) => {
     },
   });
   const toast = useToast();
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     mutation.mutate({
       name: data.name,
       phoneNumber: data.phoneNumber,

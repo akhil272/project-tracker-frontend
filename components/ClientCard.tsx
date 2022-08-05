@@ -2,7 +2,20 @@
 import React from "react";
 import { Flex, Image, Text, useColorModeValue } from "@chakra-ui/react";
 import Link from "next/link";
-const ClientCard = ({ name, phoneNumber, imageUrl, mapLink, clientId }) => {
+interface ClientCardProps {
+  name: string;
+  phoneNumber: string;
+  imageUrl: string | undefined;
+  mapLink: string | undefined;
+  clientId: number;
+}
+const ClientCard = ({
+  name,
+  phoneNumber,
+  imageUrl,
+  mapLink,
+  clientId,
+}: ClientCardProps) => {
   let boxBg = useColorModeValue("white !important", "#111c44 !important");
   let mainText = useColorModeValue("gray.800", "white");
   let secondaryText = useColorModeValue("gray.400", "gray.400");
