@@ -17,6 +17,10 @@ interface taskProps {
   projectsOnProcess: {
     projectId: number;
     processId: number;
+    process: {
+      id: number;
+      name: string;
+    };
     project: {
       id: number;
       name: string;
@@ -77,15 +81,17 @@ const Task = () => {
   return (
     <div>
       {data?.map((task: taskProps) => (
-        <Box marginY={4} key={task.id}>
+        <Box marginY={2} key={task.id}>
           <TaskCard
             name={task.name}
             projectName={task.projectsOnProcess.project.name}
+            process={task.projectsOnProcess.process.name}
             clientName={task.projectsOnProcess.project.client.name}
             totalTime={task.totalTime}
             handleStart={() => handleStart(task.id)}
             handleEnd={() => handleEnd(task.id)}
             running={task.running}
+            startTime={task.startTime}
           />
         </Box>
       ))}

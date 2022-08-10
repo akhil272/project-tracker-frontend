@@ -13,18 +13,22 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
+  FormHelperText,
 } from "@chakra-ui/react";
 import { createClient } from "@Query/clients";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-
+import { yupResolver } from "@hookform/resolvers/yup";
+import { CreateClientFormSchema } from "@Utils/FormSchema";
 const CreateClientModal = ({ isOpen, onOpen, onClose }: any) => {
   const queryClient = useQueryClient();
   const {
-    handleSubmit,
     register,
-    formState: { errors, isSubmitting },
-  } = useForm();
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(CreateClientFormSchema),
+  });
 
   const mutation = useMutation(createClient, {
     onSuccess: () => {
@@ -54,6 +58,7 @@ const CreateClientModal = ({ isOpen, onOpen, onClose }: any) => {
       },
     });
   };
+  const onInvalid = () => alert("This form is invalid try again");
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -62,110 +67,35 @@ const CreateClientModal = ({ isOpen, onOpen, onClose }: any) => {
           <ModalHeader>Add new client</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit, onInvalid)}>
               <FormControl>
-                <FormLabel htmlFor="name">First name</FormLabel>
-                <Input
-                  id="name"
-                  placeholder="Enter client name"
-                  {...register("name", {
-                    required: "This is required",
-                    minLength: {
-                      value: 4,
-                      message: "Minimum length should be 4",
-                    },
-                  })}
-                />
-
-                <FormLabel htmlFor="phoneNumber">Phone Number</FormLabel>
-                <Input
-                  id="phoneNumber"
-                  placeholder="Enter phone number"
-                  {...register("phoneNumber", {
-                    required: "This is required",
-                    minLength: {
-                      value: 4,
-                      message: "Minimum length should be 4",
-                    },
-                  })}
-                />
+                <FormLabel htmlFor="name">Business name</FormLabel>
+                <Input {...register("name")} />
+                {errors?.name && (
+                  <FormErrorMessage>
+                    {errors.name?.message as any}
+                  </FormErrorMessage>
+                )}
+                <FormLabel htmlFor="phoneNumber">Phone number</FormLabel>
+                <Input {...register("phoneNumber")} />
                 <FormLabel htmlFor="imageUrl">Image Url</FormLabel>
-                <Input
-                  id="imageUrl"
-                  placeholder="Enter image url"
-                  {...register("imageUrl", {
-                    required: "This is required",
-                    minLength: {
-                      value: 4,
-                      message: "Minimum length should be 4",
-                    },
-                  })}
-                />
+                <Input {...register("imageUrl")} />
                 <FormLabel htmlFor="country">Enter country</FormLabel>
-                <Input
-                  id="country"
-                  placeholder="Enter image url"
-                  {...register("country", {
-                    required: "This is required",
-                    minLength: {
-                      value: 4,
-                      message: "Minimum length should be 4",
-                    },
-                  })}
-                />
+                <Input {...register("country")} />
                 <FormLabel htmlFor="state">Enter state</FormLabel>
-                <Input
-                  id="state"
-                  placeholder="Enter image url"
-                  {...register("state", {
-                    required: "This is required",
-                    minLength: {
-                      value: 4,
-                      message: "Minimum length should be 4",
-                    },
-                  })}
-                />
+                <Input {...register("state")} />
                 <FormLabel htmlFor="pinCode">Enter pinCode</FormLabel>
-                <Input
-                  id="pinCode"
-                  placeholder="Enter image url"
-                  {...register("pinCode", {
-                    required: "This is required",
-                    minLength: {
-                      value: 4,
-                      message: "Minimum length should be 4",
-                    },
-                  })}
-                />
+                <Input {...register("pinCode")} />
                 <FormLabel htmlFor="addressLine1">Enter address line</FormLabel>
-                <Input
-                  id="addressLine1"
-                  placeholder="Enter image url"
-                  {...register("addressLine1", {
-                    required: "This is required",
-                    minLength: {
-                      value: 4,
-                      message: "Minimum length should be 4",
-                    },
-                  })}
-                />
-                <Input
-                  id="mapLink"
-                  placeholder="Enter map url"
-                  {...register("mapLink", {
-                    minLength: {
-                      value: 4,
-                      message: "Minimum length should be 4",
-                    },
-                  })}
-                />
+                <Input {...register("addressLine1")} />
+                <FormLabel htmlFor="mapLink">Enter map link</FormLabel>
+                <Input {...register("mapLink")} />
               </FormControl>
-
               <Button
                 mt={4}
                 colorScheme="teal"
-                isLoading={isSubmitting}
                 type="submit"
+                onSubmit={handleSubmit(onSubmit, onInvalid)}
               >
                 Submit
               </Button>

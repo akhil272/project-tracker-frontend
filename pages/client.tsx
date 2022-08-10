@@ -1,4 +1,4 @@
-import { Box, Button, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Center, Stack, useDisclosure } from "@chakra-ui/react";
 import ClientCard from "@Components/ClientCard";
 import CreateClientModal from "@Components/Models/client/CreateClientModal";
 import { createClient, fetchClients } from "@Query/clients";
@@ -32,21 +32,23 @@ const Client = () => {
     return <p>Error...</p>;
   }
   return (
-    <div>
-      <Button onClick={onOpen}>Create new</Button>
-      <CreateClientModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
-      {data?.map((client: clientProps) => (
-        <Box marginY={4} key={client.id}>
-          <ClientCard
-            name={client.name}
-            phoneNumber={client.phoneNumber}
-            imageUrl={client.imageUrl}
-            mapLink={client.mapLink}
-            clientId={client.id}
-          />
-        </Box>
-      ))}
-    </div>
+    <Center>
+      <Stack>
+        <Button onClick={onOpen}>Create new</Button>
+        <CreateClientModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+        {data?.map((client: clientProps) => (
+          <Box marginY={4} key={client.id}>
+            <ClientCard
+              name={client.name}
+              phoneNumber={client.phoneNumber}
+              imageUrl={client.imageUrl}
+              mapLink={client.mapLink}
+              clientId={client.id}
+            />
+          </Box>
+        ))}
+      </Stack>
+    </Center>
   );
 };
 

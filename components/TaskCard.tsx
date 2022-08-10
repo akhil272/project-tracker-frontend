@@ -16,11 +16,13 @@ import Timer from "./Timer";
 interface TaskCardProps {
   name: string;
   projectName: string;
+  process: string;
   clientName: string;
   totalTime: number;
   handleStart: () => void;
   handleEnd: () => void;
   running: boolean;
+  startTime: Date;
 }
 
 const TaskCard = ({
@@ -31,6 +33,8 @@ const TaskCard = ({
   handleStart,
   handleEnd,
   running,
+  process,
+  startTime,
 }: TaskCardProps) => {
   const [start, setStart] = useState(running);
   const [time, setTime] = useState(totalTime);
@@ -45,6 +49,13 @@ const TaskCard = ({
     }
     return () => clearInterval(interval);
   }, [start]);
+
+  useEffect(() => {
+    if (running) {
+      const diff = new Date().getTime() - new Date(startTime).getTime();
+      setTime(totalTime + diff);
+    }
+  }, [startTime, running, totalTime]);
 
   return (
     <Center py={6}>
@@ -71,6 +82,9 @@ const TaskCard = ({
           </Heading>
           <Text fontWeight={600} color={"gray.500"} size="sm" mb={4}>
             {projectName}
+          </Text>
+          <Text fontWeight={600} color={"gray.500"} size="sm" mb={4}>
+            {process}
           </Text>
 
           <Stack align={"center"} justify={"center"} direction={"row"} mt={6}>
